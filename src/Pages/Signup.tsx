@@ -9,8 +9,10 @@ import { intialize } from '../Stores/CredentialSlice'
 import "../Components/styles/Signup.css"
 import 'antd/es/modal/style'
 import 'antd/es/slider/style'
-const Signup = () => {
 
+
+const Signup = () => {
+  document.title = "Signup"
   const state = useAppState(state => state.credentials)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
@@ -34,7 +36,7 @@ const Signup = () => {
   const signupHandler = (e: FormEvent) => {
     e.preventDefault()
     let formData = new FormData()
-    if(confPassword && password){
+    if (confPassword && password) {
       formData.append("name", name)
       formData.append("username", username)
       formData.append("email", email)
@@ -103,6 +105,7 @@ const Signup = () => {
     return false;
   };
 
+  
 
   return (
     <div className='tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-font-sans'>
@@ -119,6 +122,9 @@ const Signup = () => {
           </div>
 
           <Button icon={<SendOutlined sizes='small' />} className='tw-w-full tw-flex tw-justify-center tw-items-center tw-rounded-full tw-mt-3 hover:tw-bg-blue-500 hover:tw-border-blue-500 hover:tw-text-white tw-cursor-pointer' onClick={signupHandler}>Submit</Button>
+          
+          
+
         </Space>
       </form>
     </div>

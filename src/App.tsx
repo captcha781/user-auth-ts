@@ -28,7 +28,7 @@ function App() {
 
 
   return (
-    <div className="tw-w-full tw-absolute tw-h-full">
+    <div className="tw-w-full tw-absolute tw-h-full tw-overflow-hidden">
       <BrowserRouter>
         <Navigation />
         <Routes>

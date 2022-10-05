@@ -57,7 +57,7 @@ const Signin = () => {
     <div className='tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-font-sans'>
       <form className='tw-w-10/12 sm:tw-w-6/12 md:tw-w-1/3 lg:tw-w-1/4  xl:tw-w-1/6 tw-p-4 tw-bg-white tw-rounded-md tw-shadow-xl tw-shadow-slate-400' onSubmit={formik.handleSubmit} >
         <h1 className='tw-text-xl tw-font-medium tw-my-1.5'>Sign In</h1>
-        <Space direction='vertical' className='tw-w-full'>
+        <Space direction='vertical' className='tw-w-full' style={{zIndex: 2}}>
           {/* <Input type='email' prefix={<MailOutlined className='tw-mr-1 tw-text-slate-400' />} placeholder="Email ID" className='tw-rounded-full tw-mt-3 p-1 tw-items-center' required={true} onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} /> */}
           <Input type='email' name='email' prefix={<MailOutlined className='tw-mr-1 tw-text-slate-400' />} placeholder="Email ID" className='tw-rounded-full tw-mt-3 p-1 tw-items-center' required={true} value={formik.values.email} onChange={formik.handleChange} />
           {/* <Input.Password prefix={<LockFilled className='tw-mr-1 tw-text-slate-400 ' />} placeholder="Password" className='tw-rounded-full tw-mt-3' required={true} onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} /> */}

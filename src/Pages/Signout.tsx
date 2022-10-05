@@ -7,7 +7,7 @@ import { signout } from '../Stores/CredentialSlice'
 import { useAppDispatch } from '../Stores/Hooks'
 
 const Signout = () => {
-
+  document.title = "Signout"
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   useEffect(() => {

@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import "aos/dist/aos.css"
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import Store from './Stores/Store';
 import axios from 'axios';
-
+import Aos from "aos"
+Aos.init()
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = "http://localhost:5000"
@@ -21,7 +23,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={Store}>
+    <div className='tw-overflow-hidden'>
     <App />
+    </div>
   </Provider>
 );
 

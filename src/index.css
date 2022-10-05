@@ -1,9 +1,122 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
     .navLink {
-        @apply tw-text-white tw-py-0.5 tw-px-1.5 tw-rounded hover:tw-bg-slate-500 hover:tw-bg-opacity-25;
+        @apply tw-text-white tw-py-0.5 tw-px-1.5 tw-rounded hover: tw-bg-slate-500 hover:tw-bg-opacity-25;
     }
+}
+
+.customer-menu-container label {
+    display: flex;
+    flex-direction: column;
+    width: 30px;
+    cursor: pointer;
+}
+
+.customer-menu-container label span {
+    background: #fff;
+    border-radius: 10px;
+    height: 3px;
+    margin: 3px 0;
+    transition: .4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+}
+
+.customer-menu-container label span:nth-of-type(1) {
+    width: 50%;
+
+}
+
+.customer-menu-container label span:nth-of-type(2) {
+    width: 100%;
+}
+
+.customer-menu-container label span:nth-of-type(3) {
+    width: 75%;
+}
+
+.customer-menu-container label input[type="checkbox"] {
+    display: none;
+}
+
+.customer-menu-container label input[type="checkbox"]:checked~span:nth-of-type(1) {
+    transform-origin: bottom;
+    transform: rotatez(45deg) translate(3px, 2px)
+}
+
+.customer-menu-container label input[type="checkbox"]:checked~span:nth-of-type(2) {
+    transform-origin: top;
+    transform: rotatez(-45deg)
+}
+
+.customer-menu-container label input[type="checkbox"]:checked~span:nth-of-type(3) {
+    transform-origin: bottom;
+    width: 50%;
+    transform: translate(12px, -4px) rotatez(45deg);
+}
+
+.custom-menu-item {
+    display: block;
+    animation-name: menuAnimation;
+    animation-duration: 300ms;
+    transition-duration: 200ms;
+}
+
+@keyframes menuAnimation {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
+
+.custom-menu-item-close {
+    animation-name: closeAnimation;
+    animation-duration: 300ms;
+    transition-duration: 200ms;
+
+}
+
+@keyframes closeAnimation {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+
+::-webkit-scrollbar {
+    width: 7px;
+    margin: 10px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #334155 ;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #a2a2a2;
 }
