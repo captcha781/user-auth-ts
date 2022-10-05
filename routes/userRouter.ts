@@ -33,6 +33,10 @@ router.post("/register", userMiddleware, upload.single("profile"), userControlle
 
 router.post("/login", userMiddleware, userController.login)
 
+router.post("/create-post",userMiddleware, userController.createPost )
+
+router.get("/posts", userController.getPosts)
+
 // router.post("/upload-profile", userMiddleware, userController.uploadProfile)
 
 export default router

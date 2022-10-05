@@ -7,8 +7,34 @@ import UserModel from "../models/UserModel";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "process";
-import { RequestModified } from "../types";
+import { MailObject, RequestModified } from "../types";
 import mv from "mv"
+import nodemailer, { TransportOptions } from "nodemailer"
+import moment from "moment"
+import PostModel from "../models/PostModel";
+
+const sendMail = async (mailObject: MailObject) => {
+    const { from, to, subject } = mailObject
+
+    const tranpsort = nodemailer.createTransport({
+        service: "sendinblue",
+        auth: {
+            user: env.NODEMAILER_USER,
+            pass: env.NODEMAILER_PASS,
+
+        }
+    })
+
+    let mailStatus = tranpsort.sendMail(mailObject)
+        .then(mailResponse => {
+            console.log(mailResponse);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+}
+
 
 const JOIschema = joi
     .object({
@@ -31,23 +57,23 @@ const JOIschema = joi
             )
             .required()
     })
-   
+
 
 export const registration = (req: express.Request, res: express.Response) => {
     // console.log(req.file)
-    if(!req.file){
-        return res.json({auth:false, message: "No Image Found"})
+    if (!req.file) {
+        return res.json({ auth: false, message: "No Image Found" })
     }
     const { name, email, password, username, confpassword } = req.body;
     JOIschema.validateAsync({ username, name, email, password, confpassword })
-    .then((result) => {
-        return UserModel.find({ email, username });
-    })
-    .then((findResponse): any => {
-        if(password !== confpassword){
-            return res.json({ auth: false, message: "Password and Confirm password didn't match" });
-        }
-        if (findResponse.length > 0) {
+        .then((result) => {
+            return UserModel.find({ email, username });
+        })
+        .then((findResponse): any => {
+            if (password !== confpassword) {
+                return res.json({ auth: false, message: "Password and Confirm password didn't match" });
+            }
+            if (findResponse.length > 0) {
                 return res.json({ auth: false, message: "User already exists" });
             }
 
@@ -59,7 +85,7 @@ export const registration = (req: express.Request, res: express.Response) => {
                             let token;
                             if (env.JWT_SECRET) {
                                 token = jwt.sign({ id: createResponse._id }, env.JWT_SECRET, {
-                                    expiresIn: 300,
+                                    expiresIn: 3600,
                                 });
                             }
                             if (createResponse.password) {
@@ -116,11 +142,12 @@ export const login = (req: RequestModified, res: express.Response) => {
                         res.status(402).json({ auth: false, message: "Passwords doesn't match" })
                     }
                     let token;
-                    if (env.JWT_SECRET) {
-                        token = jwt.sign({ id: req.user._id }, env.JWT_SECRET, { expiresIn: 300 })
+                    if (env.JWT_SECRET && env.NODEMAILER_USER) {
+                        token = jwt.sign({ id: req.user._id }, env.JWT_SECRET, { expiresIn: 3600 })
+                        req.user.password = ""
+                        // sendMail({from:env.NODEMAILER_USER,to:req.user.email,subject:"Login Alert",text: "Hello, You're logged into your account"})
+                        res.status(201).json({ auth: true, user: req.user, token, message: "Login Successful" })
                     }
-                    req.user.password = ""
-                    res.status(201).json({ auth: true, user: req.user, token, message: "Login Successful" })
                 })
                 .catch((err) => res.json(500).json({ message: err.message }))
         })
@@ -142,6 +169,42 @@ export const index = (req: RequestModified, res: express.Response) => {
     });
 };
 
+const postValidation = joi.object({
+    title: joi.string().min(5).max(75).required(),
+    content: joi.string().min(10).max(1000).required()
+})
 
-export const uploadProfile = (req: RequestModified, res: express.Response) => {
+export const createPost = (req: RequestModified, res: express.Response) => {
+
+    const { title, content } = req.body
+    const { user } = req.user
+    const time = moment().format('MMM Do YYYY, h:mm a');
+
+    postValidation.validateAsync({ title, content })
+        .then(() => {
+            PostModel.create({ title, content, postTime: time, postedBy: req.user })
+                .then(postCreateResponse => {
+                    res.status(200).json({ message: "Posted Successfully", post: postCreateResponse })
+                })
+                .catch(err => {
+                    res.status(406).json({ message: "Unable to post" })
+                    console.log(err);
+
+                })
+        })
+        .catch(err => {
+            res.status(406).json({ message: err.message })
+        })
+
+
+}
+
+export const getPosts = (req: RequestModified, res: express.Response) => {
+    PostModel.aggregate([{ $match: {} }, { $sort: { _id: -1 } }, { $limit: 20 }])
+        .then(foundRes => {
+            res.status(200).json({posts: foundRes})
+        })
+        .catch(err => {
+            res.json(500).json({message: "Some error occured in fetching posts please try again..."})
+        })
 }

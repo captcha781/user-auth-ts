@@ -32,7 +32,7 @@ const userMiddleware = (req: RequestModified, res: express.Response, next: expre
             if(req.path === "/login" || req.path === "/register"){
                 return next()
             }
-            return res.status(500).json({ auth: false, message: "Authorization token is invalid or expired" })
+            return res.status(403).json({ auth: false, message: "Authorization token is invalid or expired" })
         }
     } else {
         if(req.path === "/login" || req.path === "/register"){

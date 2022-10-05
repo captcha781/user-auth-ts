@@ -23,3 +23,10 @@ export interface RouterModified extends express.IRouter{
 // export interface Uploader {
 //     (request:RequestModified, response:express.Response, cb:any):any
 // }
+
+interface MailObject {
+    from : string,
+    to: string,
+    subject: string,
+    text: string
+}
