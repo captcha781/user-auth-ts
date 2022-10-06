@@ -9,7 +9,7 @@ const Navigation = () => {
   return (
     <>
       <div className='tw-fixed tw-w-full tw-bg-slate-800 tw-flex tw-justify-between tw-items-center tw-p-3 tw-text-white tw-font-sans' id='navigation' style={{ zIndex: 5 }}>
-        <div className='tw-font-medium tw-text-lg'>GB Instagram</div>
+        <div className='tw-font-medium tw-text-lg'>Socialyte</div>
         <div className='tw-hidden lg:tw-flex tw-justify-between tw-items-center tw-gap-2 tw-text-base tw-w-auto'>
           {state.auth ? <span className='tw-w-6 tw-h-6 tw-rounded-full tw-bg-center tw-bg-contain tw-bg-no-repeat' style={{ backgroundImage: `url("${state.user?.profilePic}")` }}></span> : <></>}
           {state.auth ? <p className='tw-text-white tw-my-0 tw-mx-2 tw-px-3 tw-py-0.5 tw-rounded tw-bg-slate-500 tw-bg-opacity-25'>@ {state.user?.name}</p> : <></>}
