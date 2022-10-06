@@ -179,7 +179,8 @@ export const createPost = (req: RequestModified, res: express.Response) => {
     const { title, content } = req.body
     const { user } = req.user
     const time = moment().format('MMM Do YYYY, h:mm a');
-
+    // console.log("runs");
+    
     postValidation.validateAsync({ title, content })
         .then(() => {
             PostModel.create({ title, content, postTime: time, postedBy: req.user })
