@@ -31,21 +31,26 @@ const CreatePost = () => {
         e.preventDefault()
 
         if (editmode) {
+
             axios.put("/api/user/edit-post", postData)
                 .then(updateResponse => {
                     dispatch(editPost(updateResponse.data.post))
                     window.location.href = window.location.pathname
                     setPostData({ title: "", content: "" })
+                    setEditmode(false)
                 })
                 .catch(err => {
                     console.log(err);
                 })
             setPostData({ title: "", content: "" })
+            
             return
         }
-
+        
+        
         axios.post("/api/user/create-post", postData)
             .then(res => {
+                console.log("runs");
                 message.success(res.data.message)
                 setTimeout(() => {
                     dispatch(addPost(res.data.post))
@@ -62,8 +67,8 @@ const CreatePost = () => {
         <div className='tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full '>
             <form className='tw-w-10/12 tw-p-3 tw-px-5 tw-bg-white tw-rounded-md tw-shadow-lg tw-shadow-slate-400 tw-flex tw-flex-col' onSubmit={handlePostSubmit}>
                 <h1 className='tw-text-lg tw-text-slate-800 tw-font-medium'>Create Post</h1>
-                <Input value={editmode ? postData?.title : ""} onChange={(e: ChangeEvent<HTMLInputElement>) => setPostData({ ...postData, title: e.target.value })} id='createtitle' type='text' name='title' placeholder='Post Title' className='tw-rounded-xl tw-mt-0.5 p-1 tw-items-center' />
-                <TextArea id='createcontent' value={editmode ? postData?.content : ""} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setPostData({ ...postData, content: e.target.value })} itemProp='readOnly={false}' name='content' placeholder='Post Text' rows={10} className='tw-rounded-xl tw-mt-1.5 p-1 tw-items-center tw-resize-none' />
+                <Input value={editmode ? postData?.title : postData?.title} onChange={(e: ChangeEvent<HTMLInputElement>) => setPostData({ ...postData, title: e.target.value })} id='createtitle' type='text' name='title' placeholder='Post Title' className='tw-rounded-xl tw-mt-0.5 p-1 tw-items-center' />
+                <TextArea id='createcontent' value={editmode ? postData?.content : postData?.content} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setPostData({ ...postData, content: e.target.value })} itemProp='readOnly={false}' name='content' placeholder='Post Text' rows={10} className='tw-rounded-xl tw-mt-1.5 p-1 tw-items-center tw-resize-none' />
                 <div className='tw-flex tw-justify-end tw-items-center tw-gap-3'>
                     <Button type='primary' htmlType='submit' className='tw-rounded-xl tw-mt-1.5 tw-relative tw-right-0 '>Submit</Button>
                     <Button type='primary' htmlType='reset' className='tw-rounded-xl tw-mt-1.5 tw-relative tw-right-0  tw-bg-amber-400 tw-border-amber-400 hover:tw-bg-amber-300' onClick={() => setPostData({title:"",content:""})}>Reset</Button>
