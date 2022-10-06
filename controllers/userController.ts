@@ -202,9 +202,63 @@ export const createPost = (req: RequestModified, res: express.Response) => {
 export const getPosts = (req: RequestModified, res: express.Response) => {
     PostModel.aggregate([{ $match: {} }, { $sort: { _id: -1 } }, { $limit: 20 }])
         .then(foundRes => {
-            res.status(200).json({posts: foundRes})
+            res.status(200).json({ posts: foundRes })
         })
         .catch(err => {
-            res.json(500).json({message: "Some error occured in fetching posts please try again..."})
+            res.json(500).json({ message: "Some error occured in fetching posts please try again..." })
         })
+}
+
+export const deletePosts = (req: RequestModified, res: express.Response) => {
+    const id = req.params.id
+
+    const post = PostModel.findById(id)
+        .then(postfoundResponse => {
+
+            if (!postfoundResponse) {
+                res.status(404).json({ message: "Post not found" })
+            }
+
+
+            if (postfoundResponse?.postedBy.username !== req.user.username) {
+                return res.status(401).json({ message: "Unauthorized activity." })
+            }
+
+            PostModel.findByIdAndDelete(id)
+                .then(deleteResponse => {
+                    res.status(200).json({ message: "Post deleted Successfully." })
+                })
+                .catch(err => {
+                    res.json({ message: "Post not found..." })
+                })
+        })
+        .catch(err => {
+            res.json({ message: err.message })
+        })
+
+}
+
+
+export const editPosts = (req: RequestModified, res: express.Response) => {
+    let { _id, title, content } = req.body
+    const time = moment().format('MMM Do YYYY, h:mm a');
+    PostModel.findById(_id)
+        .then(foundResponse => {
+            if (!foundResponse) {
+                res.status(404).json({ message: "Post not found" })
+            }
+
+            if (foundResponse?.postedBy.username !== req.user.username) {
+                return res.status(401).json({ message: "Unauthorized activity." })
+            }
+
+            PostModel.findByIdAndUpdate(_id, {title: title, content:content, postTime: time+" (edited)" })
+            .then(updateResponse => {
+                res.status(200).json({ message: "Post updated Successfully.", post:req.body })
+            })
+            .catch(err => {
+                res.json({message:"Something went wrong cannot update..."})
+            })
+        })
+
 }

@@ -37,6 +37,10 @@ router.post("/create-post",userMiddleware, userController.createPost )
 
 router.get("/posts", userController.getPosts)
 
+router.delete("/posts/:id", userMiddleware, userController.deletePosts)
+
+router.put("/edit-post", userMiddleware, userController.editPosts)
+
 // router.post("/upload-profile", userMiddleware, userController.uploadProfile)
 
 export default router

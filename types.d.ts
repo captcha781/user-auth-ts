@@ -17,7 +17,8 @@ export interface RequestModified extends express.Request{
 export interface RouterModified extends express.IRouter{
     get: (path:string, ...middleware:any) => void;
     post: (path:string, ...middleware:any) => void;
-
+    put: (path:string, ...middleware:any) => void;
+    delete: (path:string, ...middleware:any) => void;
 }
 
 // export interface Uploader {
